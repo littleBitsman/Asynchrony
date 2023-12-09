@@ -12,6 +12,7 @@ Asynchrony::ScheduledTask Asynchrony::scheduledTasks[20];
 /* Method to schedule a function with a time delay without blocking your loop.
  * In order for this to work, you must call `Asynchrony::runEventLoop` in your loop function to update
  * the event loop.
+ * DO NOT pass a function that yields using `delay()`. It will still stop execution.
  */
 void Asynchrony::schedule(unsigned long delay, void (*func)(...))
 {

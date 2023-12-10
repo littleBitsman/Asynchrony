@@ -1,10 +1,24 @@
-/*
-  Asynchrony.h - Library that allows you to schedule tasks in the future without blocking your loop.
-  Created by littleBitsman, December 8, 2023.
-  Licensed under the GNU General Public License v3.0.
-*/
-// Asynchrony.cpp
 #include "Asynchrony.h"
+
+/*
+ * Asynchrony - An asynchronous scheduling library for Arduino.
+ * Created December 8, 2023.
+ * Modified December 9, 2023.
+ * Copyright (C) 2023 littleBitsman
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 // Initialize the array of scheduled tasks
 Asynchrony::ScheduledTask Asynchrony::scheduledTasks[20];
@@ -18,7 +32,6 @@ void Asynchrony::schedule(unsigned long delay, void (*func)(...))
 {
   unsigned long executionTime = millis() + delay;
 
-  // Find an empty slot in the array to store the task
   for (int i = 0; i < sizeof(scheduledTasks) / sizeof(scheduledTasks[0]); ++i)
   {
     if (scheduledTasks[i].func == nullptr)
@@ -34,13 +47,12 @@ void Asynchrony::runEventLoop()
 {
   unsigned long currentTime = millis();
 
-  // Iterate through the array and execute tasks if their time has come
   for (int i = 0; i < sizeof(scheduledTasks) / sizeof(scheduledTasks[0]); ++i)
   {
     if (scheduledTasks[i].func != nullptr && currentTime >= scheduledTasks[i].executionTime)
     {
       scheduledTasks[i].func(millis());
-      // Clear the task after execution
+
       scheduledTasks[i] = {nullptr, 0};
     }
   }

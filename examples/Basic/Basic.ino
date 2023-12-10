@@ -10,6 +10,8 @@
   Modified 9 December, 2023
   By littleBitsman
 
+  This example is released in the public domain.
+
   https://github.com/littleBitsman/Asynchrony
 */
 

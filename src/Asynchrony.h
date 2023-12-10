@@ -29,10 +29,10 @@ private:
   struct ScheduledTask
   {
     void (*func)(...); 
-    unsigned long executionTime;
+    unsigned long executeAt;
   };
 
-  static ScheduledTask scheduledTasks[20]; 
+  static ScheduledTask scheduledTasks[20];
 
 public:
   /* Method to schedule a function with a time delay without blocking your loop.
@@ -40,7 +40,7 @@ public:
    * the event loop.
    * DO NOT pass a function that yields using `delay()`. It will still stop execution.
    */
-  static void schedule(unsigned long delay, void (*func)(...));
+  static int schedule(unsigned long delay, void (*func)(...));
 
   // Run the event loop and execute scheduled tasks.
   static void runEventLoop();

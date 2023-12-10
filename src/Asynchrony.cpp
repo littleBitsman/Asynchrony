@@ -28,18 +28,20 @@ Asynchrony::ScheduledTask Asynchrony::scheduledTasks[20];
  * the event loop.
  * DO NOT pass a function that yields using `delay()`. It will still stop execution.
  */
-void Asynchrony::schedule(unsigned long delay, void (*func)(...))
+int Asynchrony::schedule(unsigned long delay, void (*func)(...))
 {
-  unsigned long executionTime = millis() + delay;
+  unsigned long executeAt = millis() + delay;
 
   for (int i = 0; i < sizeof(scheduledTasks) / sizeof(scheduledTasks[0]); ++i)
   {
     if (scheduledTasks[i].func == nullptr)
     {
-      scheduledTasks[i] = {func, executionTime};
+      scheduledTasks[i] = {func, executeAt};
       break;
     }
   }
+
+  return executeAt;
 }
 
 // Run the event loop and execute scheduled tasks.
@@ -47,9 +49,9 @@ void Asynchrony::runEventLoop()
 {
   unsigned long currentTime = millis();
 
-  for (int i = 0; i < sizeof(scheduledTasks) / sizeof(scheduledTasks[0]); ++i)
+  for (int i = 0; i < sizeof(scheduledTasks) / sizeof(scheduledTasks[0]); i++)
   {
-    if (scheduledTasks[i].func != nullptr && currentTime >= scheduledTasks[i].executionTime)
+    if (scheduledTasks[i].func != nullptr && currentTime >= scheduledTasks[i].executeAt)
     {
       scheduledTasks[i].func(millis());
 
